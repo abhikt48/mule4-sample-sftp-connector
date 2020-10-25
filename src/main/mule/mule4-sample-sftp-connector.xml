@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:sftp="http://www.mulesoft.org/schema/mule/sftp"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sftp/current/mule-sftp.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<sftp:config name="SFTP_Config" doc:name="SFTP Config" doc:id="bd0ec92e-e22b-4420-80ee-57a34de7cdb1" >
+		<sftp:connection host="localhost" username="khushboo" password="khushi" />
+	</sftp:config>
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="33172160-b4fe-4d1c-b6b1-8d92e824b8a5" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="mule4-sample-sftp-connectorFlow" doc:id="c7bee85a-dfab-433f-8f17-e805f3b85255" >
+		<sftp:listener doc:name="On New or Updated File" doc:id="c0cdfa78-d04f-416f-a960-2cb24012a6d1" config-ref="SFTP_Config" directory="/C:/Software/Test/Input">
+			<scheduling-strategy >
+				<fixed-frequency />
+			</scheduling-strategy>
+		</sftp:listener>
+		<logger level="INFO" doc:name="Logger" doc:id="04cf0693-b792-45ba-b9f8-0abc466b632a" message="#['Received file path ' ++ attributes.path]"/>
+		<sftp:write doc:name="Write" doc:id="05bd75b1-a7e4-405d-8877-e09b0b3789bc" config-ref="SFTP_Config" path="#['/C:/Software/Test/Output/' ++ attributes.fileName]"/>
+		<sftp:delete doc:name="Delete" doc:id="25e583b0-7322-4979-b7f8-150bce3e11e5" config-ref="SFTP_Config" path="#[attributes.path]"/>
+		<sftp:copy doc:name="Copy" doc:id="a9516b7d-5e6e-4730-9873-528b7224b0be" config-ref="SFTP_Config" sourcePath="#['/C:/Software/Test/Output/' ++ attributes.fileName]" targetPath="/C:/Software/Test/copy"/>
+		<logger level="INFO" doc:name="Logger" doc:id="35442d77-34ee-41b0-b66d-ba15fdb57faf" message="** Copy completed **"/>
+		<sftp:list doc:name="List" doc:id="cc82111d-2d00-47d4-82cf-79851d532b54" config-ref="SFTP_Config" directoryPath="/C:/Software/Test/copy"/>
+		<logger level="INFO" doc:name="Logger" doc:id="0dd44a4c-7e38-45b0-b777-dce46b437064" message="#[output text/plain --- 'List after copy ' : payload]"/>
+	</flow>
+	<flow name="mule4-sample-sftp-connectorFlow1" doc:id="8c8506c4-5522-463a-a24e-1af60defd4ab" >
+		<http:listener doc:name="Listener" doc:id="1461c083-591c-4ca6-a0f1-927710e06538" config-ref="HTTP_Listener_config" path="read"/>
+		<sftp:read doc:name="Read" doc:id="9804ecee-4e59-4e62-b0ee-dd259250325f" config-ref="SFTP_Config" path="/C:/Software/Test/read-input/MuleSoft-Test.txt"/>
+		<logger level="INFO" doc:name="Logger" doc:id="6c0630e2-99eb-44f1-a266-150fb3efba14" message="#[payload]"/>
+	</flow>
+</mule>
