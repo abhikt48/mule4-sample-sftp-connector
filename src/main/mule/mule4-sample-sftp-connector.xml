@@ -6,7 +6,7 @@
 http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sftp/current/mule-sftp.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
 	<sftp:config name="SFTP_Config" doc:name="SFTP Config" doc:id="bd0ec92e-e22b-4420-80ee-57a34de7cdb1" >
-		<sftp:connection host="localhost" username="khushboo" password="khushi" />
+		<sftp:connection host="localhost" username="test" password="test" />
 	</sftp:config>
 	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="33172160-b4fe-4d1c-b6b1-8d92e824b8a5" >
 		<http:listener-connection host="0.0.0.0" port="8081" />
