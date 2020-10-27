@@ -6,3 +6,5 @@ Sample Mule4 SFTP application to read, write, delete, copy, list from SFTP serve
 2. Maven
 3. Anypoint Studio 7.6.0
 4. SFTP server
+
+Fancy for video, refer here  - [SFTP-YouTube](https://youtu.be/wpEqGDSDFMs)
